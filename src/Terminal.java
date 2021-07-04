@@ -64,12 +64,14 @@ public final class Terminal {
                                         final String command = currentLine.split(">")[1];
 
                                         if (command.strip().equals("cls")) { screen.setText(""); return; } // TODO(nschultz): HACK!
+                                        if (command.strip().equals("exit")) { System.exit(0); } // TODO(nschultz): HACK!
 
                                         out.write(command.getBytes());
                                         out.write("\r\n".getBytes());
                                         out.flush();
                                     } else {
                                         if (currentLine.strip().equals("cls")) { screen.setText(""); return; } // TODO(nschultz): HACK!
+                                        if (currentLine.strip().equals("exit")) { System.exit(0); } // TODO(nschultz): HACK!
 
                                         out.write(currentLine.getBytes());
                                         out.write("\r\n".getBytes());

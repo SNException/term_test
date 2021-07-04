@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -37,6 +38,10 @@ public final class Terminal {
         screen.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(final KeyEvent evt) {
+                if ((evt.getKeyCode() == KeyEvent.VK_V) && ((evt.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK ) != 0)) {
+                    pasteFromClipboard(screen);
+                }
+
                 switch (evt.getKeyCode()) {
                     case KeyEvent.VK_ENTER: {
                         insertString(screen, "\n", true);
@@ -180,6 +185,20 @@ public final class Terminal {
             } catch(final BadLocationException ex) {
                 assert false;
             }
+        }
+    }
+
+    private void pasteFromClipboard(final JTextPane pane) {
+        assert pane != null;
+
+        try {
+            final Clipboard c    = Toolkit.getDefaultToolkit().getSystemClipboard();
+            final Transferable t = c.getContents(this);
+            final String content = (String) t.getTransferData(DataFlavor.stringFlavor);
+
+            insertString(pane, content, true);
+        } catch (final Exception ex) {
+            ex.printStackTrace(System.err); // TODO(nschultz): Temporary
         }
     }
 }

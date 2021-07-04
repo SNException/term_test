@@ -11,7 +11,7 @@ SET DOC_DIR=doc
 SET LIBS_DIR=libs
 
 SET JVM_FLAGS=-ea -Xms32m -Xmx32m -XX:+AlwaysPreTouch -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC
-SET COMPILER_FLAGS=-Xlint:all -Xlint:unchecked -Xdiags:verbose -Xmaxerrs 5 -g -encoding UTF8
+SET COMPILER_FLAGS=-Xlint:all -Xlint:deprecation -Xlint:unchecked -Xdiags:verbose -Xmaxerrs 5 -g -encoding UTF8
 SET ENTRY_POINT=Main
 SET EXE_NAME=App
 SET LIBS=

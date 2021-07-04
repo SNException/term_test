@@ -38,7 +38,15 @@ public final class Terminal {
         screen.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(final KeyEvent evt) {
-                if ((evt.getKeyCode() == KeyEvent.VK_V) && ((evt.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK ) != 0)) {
+                if ((evt.getKeyCode() == KeyEvent.VK_C) && ((evt.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+                    // TODO(nschultz): Abort
+                    // Maybe:
+                    // - execute 'tasklist' and look for the command you just typed (e.g 'more', 'vim') and check timestamp to make sure it
+                    // is current. The we can either kill it via executing another command like 'taskkill /F /PID' or we get all processes via the Java9
+                    // API and call kill().
+                }
+
+                if ((evt.getKeyCode() == KeyEvent.VK_V) && ((evt.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
                     pasteFromClipboard(screen);
                 }
 

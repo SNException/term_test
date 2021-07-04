@@ -54,10 +54,15 @@ public final class Terminal {
                                     final String[] commandArr = currentLine.split(">");
                                     if (commandArr != null && commandArr.length > 1) {
                                         final String command = currentLine.split(">")[1];
+
+                                        if (command.strip().equals("cls")) { screen.setText(""); return; } // TODO(nschultz): HACK!
+
                                         out.write(command.getBytes());
                                         out.write("\r\n".getBytes());
                                         out.flush();
                                     } else {
+                                        if (currentLine.strip().equals("cls")) { screen.setText(""); return; } // TODO(nschultz): HACK!
+
                                         out.write(currentLine.getBytes());
                                         out.write("\r\n".getBytes());
                                         out.flush();
@@ -75,10 +80,13 @@ public final class Terminal {
                         }
                     } break;
 
-                    case KeyEvent.VK_UP:
-                    case KeyEvent.VK_DOWN:
-                    case KeyEvent.VK_LEFT:
-                    case KeyEvent.VK_RIGHT: {
+                    case KeyEvent.VK_UP: {
+                        // TODO(nschultz): History up
+                        evt.consume();
+                    } break;
+
+                    case KeyEvent.VK_DOWN: {
+                        // TODO(nschultz): History down
                         evt.consume();
                     } break;
 

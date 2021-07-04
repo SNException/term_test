@@ -14,7 +14,7 @@ public final class Terminal {
         } catch (final Exception ignore) {
         }
 
-        final JFrame frame = new JFrame("untitled");
+        final JFrame frame = new JFrame("term");
 
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(screenSize.width / 2, screenSize.height / 2);
@@ -46,24 +46,22 @@ public final class Terminal {
                         if (!currentLine.strip().isEmpty()) {
                             if (out != null) {
                                 try {
-                                    final String command = currentLine.split(">")[1];
-                                    out.write(command.getBytes());
-                                    out.write("\r\n".getBytes());
-                                    out.flush();
+                                    final String[] commandArr = currentLine.split(">");
+                                    if (commandArr != null && commandArr.length > 1) {
+                                        final String command = currentLine.split(">")[1];
+                                        out.write(command.getBytes());
+                                        out.write("\r\n".getBytes());
+                                        out.flush();
+                                    } else {
+                                        out.write(currentLine.getBytes());
+                                        out.write("\r\n".getBytes());
+                                        out.flush();
+                                    }
                                 } catch (final Exception ex) {
                                     ex.printStackTrace(System.err); // TODO(nschultz): Temporary
                                 }
                             }
-
-                            // final ArrayList<String> commandLine = new ArrayList<>(); {
-                                // commandLine.add("cmd");
-                                // commandLine.add("/c");
-                                // commandLine.add(currentLine);
-                            // }
-                            // final String output = runCommand(commandLine);
-                            // insertString(screen, output, true);
                         }
-                        // insertString(screen, "> ", true);
                     } break;
 
                     case KeyEvent.VK_BACK_SPACE: {
@@ -90,6 +88,7 @@ public final class Terminal {
             }
         });
         frame.add(new JScrollPane(screen));
+        frame.setIconImage(new ImageIcon("res\\icon.png").getImage());
 
         frame.setVisible(true);
 
@@ -112,7 +111,6 @@ public final class Terminal {
                 while (true) {
                     final byte[] buffer = new byte[4096];
                     final int readBytes = in.read(buffer);
-                    System.err.println(new String(buffer, 0, readBytes));
                     insertString(screen, new String(buffer, 0, readBytes), true);
                 }
             } catch (final Exception ex) {
@@ -182,34 +180,6 @@ public final class Terminal {
             } catch(final BadLocationException ex) {
                 assert false;
             }
-        }
-    }
-
-    private String runCommand(final ArrayList<String> cmd) {
-        Process process = null;
-        try {
-            final StringBuilder result = new StringBuilder(1024);
-
-            final ProcessBuilder builder = new ProcessBuilder(cmd);
-            builder.redirectErrorStream(true);
-
-            process = builder.start();
-
-            final InputStream in = process.getInputStream();
-            while (true) {
-                final byte[] buffer = new byte[4096];
-                final int readBytes = in.read(buffer);
-                if (readBytes == -1) {
-                    process.destroy();
-                    return result.toString();
-                }
-                result.append(new String(buffer, 0, readBytes));
-            }
-        } catch (final Exception ex) {
-            if (process != null) {
-                process.destroyForcibly();
-            }
-            return ex.toString();
         }
     }
 }
